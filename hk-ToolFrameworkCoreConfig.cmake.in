@@ -7,3 +7,5 @@ include( CMakeFindDependencyMacro )
 find_dependency( Boost 1.46 REQUIRED COMPONENTS @hk-ToolFrameworkCore_BOOST_COMPONENTS@ )
 
 include("${hk-ToolFrameworkCore_CMAKE_DIR}/hk-ToolFrameworkCore_Library_Targets.cmake")
+
+set(hk-ToolFrameworkCore_SRC_DIR ${hk-ToolFrameworkCore_CMAKE_DIR}/../../../src_ CACHE INTERNAL "hk-ToolFrameworkCore_SRC_DIR")

@@ -6,10 +6,6 @@ import os
 
 class MyHKLib(CMake):
 
-
-
-
-
     def __init__(self, path):
         super().__init__(path)
 

@@ -77,61 +77,38 @@ file(GLOB_RECURSE TOOL_SRC RELATIVE ${CMAKE_SOURCE_DIR} "src/src/Tool/*.cpp")
 file(GLOB_RECURSE TOOLCHAIN_SRC RELATIVE ${CMAKE_SOURCE_DIR} "src/src/ToolChain/*.cpp")
 file(GLOB EXE_SRC RELATIVE ${CMAKE_SOURCE_DIR} "src/src/*.cpp")
 
+
 pbuilder_library(
-        TARGET Store
-        SOURCES ${STORE_SRC}
+        TARGET ToolFrameworkCore
+        SOURCES ${STORE_SRC} ${TOOL_SRC} ${LOGGING_SRC}
         PUBLIC_EXTERNAL_LIBRARIES ${PUBLIC_EXT_LIBS}
         PRIVATE_EXTERNAL_LIBRARIES ${PRIVATE_EXT_LIBS}
 )
 
 
-pbuilder_library(
-        TARGET CoreDataModel
-        SOURCES ${DATAMODEL_SRC}
-        PROJECT_LIBRARIES Store
-        PUBLIC_EXTERNAL_LIBRARIES ${PUBLIC_EXT_LIBS}
-        PRIVATE_EXTERNAL_LIBRARIES ${PRIVATE_EXT_LIBS}
-)
-
-pbuilder_library(
-        TARGET Logging
-        SOURCES ${LOGGING_SRC}
-        PROJECT_LIBRARIES ${PACKAGE_LIBS}
-        PUBLIC_EXTERNAL_LIBRARIES ${PUBLIC_EXT_LIBS}
-        PRIVATE_EXTERNAL_LIBRARIES ${PRIVATE_EXT_LIBS}
-)
-
-pbuilder_library(
-        TARGET Tool
-        SOURCES ${TOOL_SRC}
-        PROJECT_LIBRARIES CoreDataModel
-        PUBLIC_EXTERNAL_LIBRARIES ${PUBLIC_EXT_LIBS}
-        PRIVATE_EXTERNAL_LIBRARIES ${PRIVATE_EXT_LIBS}
-)
-
-pbuilder_library(
-        TARGET ToolChain
-        SOURCES ${TOOLCHAIN_SRC}
-        PROJECT_LIBRARIES Logging Factory
-        PUBLIC_EXTERNAL_LIBRARIES ${PUBLIC_EXT_LIBS}
-        PRIVATE_EXTERNAL_LIBRARIES ${PRIVATE_EXT_LIBS}
-)
-
-pbuilder_library(
-        TARGET Factory
-        SOURCES ${FACTORY_SRC}
-        PROJECT_LIBRARIES DummyTool
-        PUBLIC_EXTERNAL_LIBRARIES ${PUBLIC_EXT_LIBS}
-        PRIVATE_EXTERNAL_LIBRARIES ${PRIVATE_EXT_LIBS}
-)
-
-pbuilder_library(
-        TARGET DummyTool
-        SOURCES ${DUMMYTOOL_SRC}
-        PROJECT_LIBRARIES Tool
-        PUBLIC_EXTERNAL_LIBRARIES ${PUBLIC_EXT_LIBS}
-        PRIVATE_EXTERNAL_LIBRARIES ${PRIVATE_EXT_LIBS}
-)
+#pbuilder_library(
+#        TARGET ToolChain
+#        SOURCES ${TOOLCHAIN_SRC}
+#        PROJECT_LIBRARIES ToolFrameworkCore Factory
+#        PUBLIC_EXTERNAL_LIBRARIES ${PUBLIC_EXT_LIBS}
+#        PRIVATE_EXTERNAL_LIBRARIES ${PRIVATE_EXT_LIBS}
+#)
+# -> to be compiled later (needs user tools)
+#pbuilder_library(
+#        TARGET Factory
+#        SOURCES ${FACTORY_SRC}
+#        PROJECT_LIBRARIES
+#        PUBLIC_EXTERNAL_LIBRARIES ${PUBLIC_EXT_LIBS}
+#        PRIVATE_EXTERNAL_LIBRARIES ${PRIVATE_EXT_LIBS}
+#)
+#
+#pbuilder_library(
+#        TARGET DummyTool
+#        SOURCES ${DUMMYTOOL_SRC}
+#        PROJECT_LIBRARIES Tool
+#        PUBLIC_EXTERNAL_LIBRARIES ${PUBLIC_EXT_LIBS}
+#        PRIVATE_EXTERNAL_LIBRARIES ${PRIVATE_EXT_LIBS}
+#)
 
 pbuilder_install_headers(${HEADERS})
 
@@ -140,20 +117,16 @@ pbuilder_install_headers(${HEADERS})
 
 pbuilder_component_install_and_export(
         COMPONENT Library
-        LIBTARGETS Store CoreDataModel Logging  Tool ToolChain Factory DummyTool
+        LIBTARGETS ToolFrameworkCore # ToolChain Factory
 )
 
-MESSAGE(${EXE_SRC})
-pbuilder_executables (
-        TARGETS_VAR toolmain
-        SOURCES ${EXE_SRC}
-        PROJECT_LIBRARIES ToolChain
-)
+#MESSAGE(${EXE_SRC})
+#pbuilder_executables (
+#        TARGETS_VAR toolmain
+#        SOURCES ${EXE_SRC}
+#        PROJECT_LIBRARIES ToolChain
+#)
 
-
-
-#configure_file(this_myhklib.sh.in this_myhklib.sh)
-#pbuilder_install_files(${BIN_INSTALL_DIR} ${CMAKE_CURRENT_BINARY_DIR}/this_ptheta.sh)
 
 configure_file(${PROJECT_SOURCE_DIR}/${PROJECT_NAME}Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake @ONLY)
 pbuilder_do_package_config()

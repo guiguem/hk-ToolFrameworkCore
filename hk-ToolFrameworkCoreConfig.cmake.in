@@ -9,3 +9,11 @@ find_dependency( Boost 1.46 REQUIRED COMPONENTS @hk-ToolFrameworkCore_BOOST_COMP
 include("${hk-ToolFrameworkCore_CMAKE_DIR}/hk-ToolFrameworkCore_Library_Targets.cmake")
 
 set(hk-ToolFrameworkCore_SRC_DIR ${hk-ToolFrameworkCore_CMAKE_DIR}/../../../src_ CACHE INTERNAL "hk-ToolFrameworkCore_SRC_DIR")
+
+if( NOT TARGET hk-ToolFrameworkCore::@ToolFrameworkCore_FULL_TARGET_NAME@ )
+    if( TARGET @ToolFrameworkCore_FULL_TARGET_NAME@ )
+        add_library( hk-ToolFrameworkCore::@ToolFrameworkCore_FULL_TARGET_NAME@ ALIAS @ToolFrameworkCore_FULL_TARGET_NAME@ )
+    else()
+        include("${hk-ToolFrameworkCore_CMAKE_DIR}/hk-ToolFrameworkCore_Library_Targets.cmake")
+    endif()
+endif()
